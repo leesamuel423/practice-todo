@@ -35,7 +35,7 @@ app.use((err, req, res) => {
 });
 
 // Connect to MongoDB and start server
-const MONGO_URI = 'mongodb://localhost:27017/TaskManager';
+const MONGO_URI = 'mongodb+srv://leesamuel423:3zJqhrRTsq7wdeC6@cluster0.umrxrob.mongodb.net/?retryWrites=true&w=majority';
 mongoose.connect(MONGO_URI);
 
 //start server
