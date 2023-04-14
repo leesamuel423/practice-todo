@@ -1,0 +1,31 @@
+const mongoose = require ('mongoose');
+const bycrypt = require ('bcryptjs');
+
+// User Schema
+const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  tasks: [],
+});
+
+// User Password Bycryption
+userSchema.pre('save', async function (next) {
+  // if password field isn't modified, can move on to the next middleware
+  if (!this.isModified('password')) return next();
+  // if password field is modified, hash the password
+  const salt = await bycrypt.genSalt(10);
+  const hashPassword = await bycrypt.hash(this.password, salt);
+  // replace the password with the hashed password
+  this.password = hashPassword;
+  next();
+});
+
+const User = mongoose.model('user', userSchema);
+module.exports = User;
