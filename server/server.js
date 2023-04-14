@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const app = express();
 const PORT = 3000;
 
-const apiRouter = require('./routes/apiRoute.js');
+const userRoute = require('./routes/userRoutes.js');
 
 // Handles parsing request body
 app.use(express.json());
@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/assets', express.static(path.resolve(__dirname, '../client/assets')));
 
 // Forwards all requests from /api to apiRouter
-app.use('/api', apiRouter);
+app.use('/api/users', userRoute);
 
 // Handles other routes
 app.get('/', (req, res) => {
