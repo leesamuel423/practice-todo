@@ -4,14 +4,14 @@ const mongoose = require('mongoose');
 const app = express();
 const PORT = 3000;
 
-const userRoute = require('./routes/userRoutes.js');
+const userRoute = require(path.resolve(__dirname, './routes/userRoutes.js'));
 
 // Handles parsing request body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files
-app.use('/assets', express.static(path.resolve(__dirname, '../client/assets')));
+app.use('/client', express.static(path.resolve(__dirname, '../client')));
 
 // Forwards all requests from /api to apiRouter
 app.use('/api/users', userRoute);
@@ -35,14 +35,13 @@ app.use((err, req, res) => {
 });
 
 // Connect to MongoDB and start server
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server listening on port: ${PORT}`);
-    });
-  })
-  .catch((err) => console.log(`err: ${err}`));
+const MONGO_URI = 'mongodb://localhost:27017/TaskManager';
+mongoose.connect(MONGO_URI);
 
+//start server
+app.listen(PORT, () => {
+  console.log(`Server listening on port: ${PORT}`);
+});
 
 // export statement
 module.exports = app;
