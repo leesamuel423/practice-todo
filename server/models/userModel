@@ -1,8 +1,9 @@
 const mongoose = require ('mongoose');
-const bycrypt = require ('bcryptjs');
+const Schema = mongoose.Schema;
+const bcrypt = require ('bcryptjs');
 
 // User Schema
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   username: {
     type: String,
     required: true,
@@ -15,16 +16,20 @@ const userSchema = new mongoose.Schema({
   tasks: [],
 });
 
-// User Password Bycryption
+// User Password Bcryption Pre-Save Hook
 userSchema.pre('save', async function (next) {
-  // if password field isn't modified, can move on to the next middleware
-  if (!this.isModified('password')) return next();
-  // if password field is modified, hash the password
-  const salt = await bycrypt.genSalt(10);
-  const hashPassword = await bycrypt.hash(this.password, salt);
-  // replace the password with the hashed password
-  this.password = hashPassword;
-  next();
+  try {
+    // if password field isn't modified, can move on to the next middleware
+    if (!this.isModified('password')) return next();
+    // if password field is modified, hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(this.password, salt);
+    // replace the password with the hashed password
+    this.password = hashedPassword;
+    next();
+  } catch (err) {
+    throw new Error('Error with userSchema.pre bcryption');
+  }
 });
 
 const User = mongoose.model('user', userSchema);
