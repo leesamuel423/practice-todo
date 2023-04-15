@@ -81,7 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
       .then ((data) => {
         console.log(data);
         localStorage.setItem('todos', JSON.stringify(data.tasks));
-        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('user', JSON.stringify(data.username));
+        localStorage.setItem('id', JSON.stringify(data._id));
         window.location.href = '/todos';
       })
       .catch((err) => {
@@ -114,7 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
       .then ((data) => {
         console.log(data);
         localStorage.setItem('todos', JSON.stringify(data.tasks));
-        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('user', JSON.stringify(data.username));
+        localStorage.setItem('id', JSON.stringify(data._id));
         window.location.href = '/todos';
       })
       // need to add routing to the next page
