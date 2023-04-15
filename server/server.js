@@ -17,9 +17,15 @@ app.use('/client', express.static(path.resolve(__dirname, '../client')));
 app.use('/api/users', userRoute);
 
 // Handles other routes
+
 app.get('/', (req, res) => {
   res.status(200).sendFile(path.join(__dirname, '../client/index.html'));
 });
+
+app.get('/todos', (req, res) => {
+  res.status(200).sendFile(path.join(__dirname, '../client/todos.html'));
+});
+
 
 // Handles any other uknown routes
 app.use((req, res) => res.sendStatus(404));
