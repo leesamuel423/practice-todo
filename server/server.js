@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const app = express();
 const PORT = 3000;
 
-const userRoute = require(path.resolve(__dirname, './routes/userRoutes.js'));
+const userRoutes = require(path.resolve(__dirname, './routes/userRoutes.js'));
+const todoRoutes = require(path.resolve(__dirname, './routes/todoRoutes.js'));
 
 // Handles parsing request body
 app.use(express.json());
@@ -14,10 +15,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/client', express.static(path.resolve(__dirname, '../client')));
 
 // Forwards all requests from /api to apiRouter
-app.use('/api/users', userRoute);
+app.use('/api/users', userRoutes);
+app.use('/api/todos', todoRoutes);
 
 // Handles other routes
-
 app.get('/', (req, res) => {
   res.status(200).sendFile(path.join(__dirname, '../client/index.html'));
 });
