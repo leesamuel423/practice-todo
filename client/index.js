@@ -74,9 +74,15 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       body: JSON.stringify(user)
     })
-      .then((res) => res.json())
-      .then((data) => {
+      .then((res) => {
+        if (res.status === 200) return res.json();
+        else throw new Error('Invalid username or password');
+      })
+      .then ((data) => {
         console.log(data);
+        localStorage.setItem('todos', JSON.stringify(data.tasks));
+        localStorage.setItem('user', JSON.stringify(data.user));
+        window.location.href = '/todos';
       })
       .catch((err) => {
         console.log(err);
@@ -100,7 +106,17 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       body: JSON.stringify(user)
     })
-      .then((res) => res.json())
+      .then((res) => {
+        console.log('THIS IS THE RESPONSE', res);
+        if (res.status === 200) return res.json();
+        else throw new Error('Username already exists. Please choose another username.');
+      })
+      .then ((data) => {
+        console.log(data);
+        localStorage.setItem('todos', JSON.stringify(data.tasks));
+        localStorage.setItem('user', JSON.stringify(data.user));
+        window.location.href = '/todos';
+      })
       // need to add routing to the next page
       .catch((err) => {
         console.log('There was an error creating the user: ', err);
