@@ -4,14 +4,14 @@ const userController = require('../controllers/userController.js');
 
 // Handles requests to /api/users
 // Login Route
-router.route('/login', 
+router.post('/login', 
   userController.login,
   (req, res) => {
     res.status(200).json(res.locals.user);
   }
 );
 // Signup Route
-router.route('/signup', 
+router.post('/signup', 
   userController.signup,
   (req, res) => {
     res.status(200).json(res.locals.user);

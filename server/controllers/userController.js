@@ -1,5 +1,5 @@
 const User = require('../models/userModel.js');
-// const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 
 const userController = {};
 
@@ -14,7 +14,7 @@ userController.signup = async (req, res, next) => {
   // check to see if username and password are provided
   if (!username || !password) {
     res.status(400);
-    throw new Error('Please complete all required fields');
+    return next(new Error('Please complete all required fields'));
   }
 
   try {
@@ -23,20 +23,47 @@ userController.signup = async (req, res, next) => {
     // if username is in database, throw error
     if (user) {
       res.status(400);
-      throw new Error('Username already exists. Please choose another username');
+      return next(new Error('Username already exists. Please choose another username'));
     }
     // if username is not in database, create new user with bcrypt hashed password
-    const newUser = User.create({ username, password });
+    const newUser = await User.create({ username, password });
     res.locals.user = newUser;
     return next();
   }
   catch (err) {
     res.status(400);
-    throw new Error('Error in userController.login controller');
+    return next(new Error('Error in userController.login controller'));
   }
 };
 
-
+userController.login = async (req, res, next) => {
+  console.log('--> userController.login <--');
+  const { username, password } = req.body;
+  console.log('req.body from userController.login:', req.body);
+  if (!username || !password) {
+    res.status(400);
+    return next(new Error('Please complete all required fields'));
+  }
+  try {
+    const user = await User.findOne({ username }).exec();
+    if (!user) {
+      res.status(400);
+      return next(new Error('Incorrect username or password'));
+    }
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      res.status(400);
+      return next(new Error('Incorrect username or password'));
+    }
+    res.locals.user = user;
+    console.log('Welcome back', user.username);
+    return next();
+  }
+  catch (err) {
+    res.status(400);
+    return next(new Error('Error in userController.login controller'));
+  }
+};
 
 
 // Export statement
