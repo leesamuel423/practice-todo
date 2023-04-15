@@ -1,0 +1,8 @@
+* {
+  background-color: lightgreen;
+}
+
+#todoHome {
+  display: flex;
+  flex-direction: column;
+}
